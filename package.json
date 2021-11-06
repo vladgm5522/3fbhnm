@@ -1,0 +1,19 @@
+{
+  "name": "gh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "prequest": "^1.0.0",
+    "vk-io": "^4.0.0-rc.21"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": "13.14.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
