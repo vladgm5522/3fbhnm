@@ -45,16 +45,36 @@ const right = [
 
 const food = [
 	{
+		name: '',
+		cost: 0,
+		id:0
+	},
+	{
 		name: 'Шоколадка',
 		cost: 50,
 		id:1 
 	},
 	{
-		name: 'пиво',
+		name: 'Пиво',
 		cost: 100,
 		id:2 
 	},
-	
+	{
+		name: 'Квас',
+		cost: 150,
+		id:3
+	},
+	{
+		name: 'Сок',
+		cost: 200,
+		id:4
+	},
+	{
+		name: 'Квас Яблочный',
+		cost: 250,
+		id:5
+	}
+
 ];
 
 const cars = [
@@ -315,46 +335,9 @@ setInterval(async () => {
 	await saveUsers();
 }, 30000);
 
-setInterval(async () => {
-	users.filter(x=> x.misc.farm !== 0).map(x=> {
-		if(x.misc.farm === 1)
-		{
-			x.farm_btc += 100;
-		}
 
-		if(x.misc.farm === 2)
-		{
-			x.farm_btc += 2500;
-		}
 
-		if(x.misc.farm === 3)
-		{
-			x.farm_btc += 4000;
-		}
-		
-		if(x.misc.farm === 4)
-		{
-			x.farm_btc += 5200;
-		}
-		
-		if(x.misc.farm === 5)
-		{
-			x.farm_btc += 6300;
-		}
-	});
-}, 3600000);
 
-setInterval(async () => {
-	users.map(user => {
-		if(user.business)
-		{
-			const biz = businesses.find(x=> x.id === user.business);
-			if(!biz) return;
-
-			user.biz += biz.earn;
-		}
-	});
-}, 3600000);
 
 
 
@@ -484,9 +467,9 @@ cmd.hear(/^(?:меню)$/i, async (message, bot) => {
 	
 	text += ` 📕Ваше продовольствие:\n`;
 	
-	if(message.user.food == 2) text += `🍻 Пивко от Киски: ${message.user.food.toString().replace(/2/gi, "пиво")}\n`;
-	if(message.user.food == 1) text += `🍫 Шоколад "Котейка": ${message.user.food.toString().replace(/1/gi, "шоколадка")}\n`;
-	if(message.user.food != 0) text += `количество: ${(message.user.foodid)}\n`;
+	if(message.user.food >= 2) text += `🍻 Напиток от Киски: ${food[message.user.food - 0].name}\n`;
+	if(message.user.food == 1) text += `🍫 Шоколад "Котейка": ${food[message.user.food - 0].name}\n`;
+	if(message.user.food != 0) text += `Kоличество: ${(message.user.foodid)}\n`;
 
 
 	text += `\n📗 Дата регистрации: ${message.user.regDate}`;
@@ -567,30 +550,62 @@ cmd.hear(/^(?:передать|передай|перидать|пиредать)
 //сьесть еду
 
 cmd.hear(/^(?:съесть еду|сьесть еду|еда сьесть|еда съесть|сьесть еду|сьесть|еду сьесть|съесть|Съесть еду)\s([0-9]+)$/i, async (message, bot) => { 
-if(message.user.foodid < Number(message.args[1])) 
-	return bot(`низя`);
+if(message.user.foodid < Number(message.args[1])) {
+	return bot(`нет столько еды`);
+}
 
-if(message.user.food == 1 && message.user.foodid != 0){
-message.user.foodid -= 1*Number(message.args[1])
+if(message.user.food == 1 && message.user.foodid != 0) {
+	message.user.foodid -= 1*Number(message.args[1])
+	return bot(`${message.user.tag} сьел шоколадки`, {attachment: `photo-206714263_457239018`});
 }
+
 if(Number(message.args[1]) == NaN) {
-message.user.foodid -= 1
+	message.user.foodid -= 1
+	return bot(`${message.user.tag} сьел шоколадку`, {attachment: `photo-206714263_457239018`});
 }
-return bot(`${message.user.tag} сьел`, {attachment: `photo-206714263_457239018`});
+
+
 });
 
 
-cmd.hear(/^(?:выпить пиво|выпить|пиво выпить)\s([0-9]+)$/i, async (message, bot) => { 
-if(message.user.foodid < Number(message.args[1])) 
-	return bot(`низя`);
-if(Number(message.args[1]) == NaN)
-	return bot(`низя`);
 
-if(message.user.food == 2 || message.user.foodid < Number(message.args[1]))
+
+
+
+
+
+cmd.hear(/^(?:выпить пиво|выпить|пиво выпить)\s([0-9]+)$/i, async (message, bot) => { 
+if(message.user.foodid < Number(message.args[1])){ 
+	return bot(`низя`);
+}
+
+if(message.user.food == 2 || message.user.foodid < Number(message.args[1])) {
 	message.user.foodid -= 1*Number(message.args[1])
 	message.user.butil += 1*Number(message.args[1])
 const int = utils.pick(["бухнул", "выбухался", "вздрогнул", "ушатался", "уебался", "выпил", "опохмелился",]);
 return bot(`${message.user.tag} ${int} заработал бутылки`, {attachment: `photo-206714263_457239017`});
+	}
+
+else if(message.user.food == 3 || message.user.foodid < Number(message.args[1])) {
+	message.user.foodid -= 1*Number(message.args[1])
+	message.user.butil += 1*Number(message.args[1])
+const int = utils.pick(["бухнул", "выбухался", "вздрогнул", "ушатался", "уебался", "выпил", "опохмелился",]);
+return bot(`${message.user.tag} ${int} заработал бутылки`, {attachment: `photo-206714263_457239022`});
+	}
+
+else if(message.user.food == 4 || message.user.foodid < Number(message.args[1])) {
+	message.user.foodid -= 1*Number(message.args[1])
+	message.user.butil += 1*Number(message.args[1])
+const int = utils.pick(["бухнул", "выбухался", "вздрогнул", "ушатался", "уебался", "выпил", "опохмелился",]);
+return bot(`${message.user.tag} ${int} заработал бутылки`, {attachment: `photo-206714263_457239024`});
+	}
+
+else if(message.user.food == 5 || message.user.foodid < Number(message.args[1])) {
+	message.user.foodid -= 1*Number(message.args[1])
+	message.user.butil += 1*Number(message.args[1])
+const int = utils.pick(["бухнул", "выбухался", "вздрогнул", "ушатался", "уебался", "выпил", "опохмелился",]);
+return bot(`${message.user.tag} ${int} заработал бутылки`, {attachment: `photo-206714263_457239023`});
+	}
 });
 
 
@@ -619,30 +634,53 @@ cmd.hear(/^(?:еда)$/i, async (message, bot) => {
 	if(!message.args[1]) return bot(`еда:
 ${message.user.food === 1 ? '🔹' : '🔸'} 1. Шоколадка - (50)
 ${message.user.food === 2 ? '🔹' : '🔸'} 2. Пиво - (100)
+${message.user.food === 3 ? '🔹' : '🔸'} 3. Квас - (150)
+${message.user.food === 4 ? '🔹' : '🔸'} 4. Сок - (200)
+${message.user.food === 5 ? '🔹' : '🔸'} 5. Квас яблочный - (250)
 Для покупки введите "еда [номер] [количество]"`);
 
 });
+
 
 cmd.hear(/^(?:еда)\s([0-9]+)\s(.*)$/i, async (message, bot) => {
 	if(!message.args[1]) return bot(`еда:
 ${message.user.food === 1 ? '🔹' : '🔸'} 1. Шоколадка - (50)
 ${message.user.food === 2 ? '🔹' : '🔸'} 2. Пиво - (100)
+${message.user.food === 3 ? '🔹' : '🔸'} 3. Квас - (150)
+${message.user.food === 4 ? '🔹' : '🔸'} 4. Сок - (200)
+${message.user.food === 5 ? '🔹' : '🔸'} 5. Квас Яблочный - (250)
 Для покупки введите "еда [номер] [количество]"`);
 
 	const sell = food.find(x=> x.id === Number(message.args[1]));
 	if(!sell) return;
+	if(message.user.food != 0) return bot(`у вас уже есть еда (${utils.sp(message.user.food)}), введите "Сьсть еду"`);
 
 	if(message.user.online < sell.cost*Number(message.args[2])) return bot(`недостаточно кискокронов`);
-	
-	else if(message.user.online >= sell.cost*Number(message.args[2]) && message.user.food != Number(message.args[1]))
+	else if(message.user.online >= sell.cost*Number(message.args[2]))
 	{
 		message.user.online -= sell.cost*Number(message.args[2]);
 		message.user.food = sell.id;
 		message.user.foodid += Number(message.args[2]);
-
+		
 		return bot(`${message.user.tag} купили "${sell.name}" в количестве "${(Number(message.args[2]))}"  за "${utils.sp(sell.cost)*Number(message.args[2])} кискокронов"`);
 	}
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 cmd.hear(/^(?:машины|машина)\s?([0-9]+)?$/i, async (message, bot) => {
@@ -708,12 +746,12 @@ cmd.hear(/^(?:Бутылки)$/i, async (message, bot) => {
 
 
 
-cmd.hear(/^(?:Продать Бутыль | продать бутылки | продать бутылку)\s?([0-9]+)?$/i, async (message, bot) => {
+cmd.hear(/^(?:Продать Бутыль|продать бутылки|продать бутылку)\s?([0-9]+)?$/i, async (message, bot) => {
 
 		if(!message.user.butil) return bot(`у вас нет бутылок`);
-		let a = Math.floor(message.user.butil * 0.85);
+		let a = Math.floor(message.user.butil * 5);
 
-		message.user.online += Math.floor(message.user.butil * 0.85);
+		message.user.online += Math.floor(message.user.butil * 5);
 		message.user.butil = 0;
 
 		return bot(`вы продали бутыли за ${utils.sp(a)}$`);
