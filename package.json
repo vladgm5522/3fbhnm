@@ -6,6 +6,7 @@
   "dependencies": {
     "prequest": "^1.0.0",
     "vk-io": "^4.0.0-rc.30"
+    "express": "^4.17.3",
   },
   "devDependencies": {},
   "scripts": {
