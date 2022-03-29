@@ -32,7 +32,7 @@ let settings = require('./settings.json'),
 	base = require("./base.json"),
 	chats = require('./chats.json');
 
-app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 3000));
 
 //For avoidong Heroku $PORT error
 app.get('/', function(request, response) {
