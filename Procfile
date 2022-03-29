@@ -1,2 +1,2 @@
-worker: node app.js
-web: node app.js
+worker: node --unhandled-rejections=none ./app.js
+web: node --unhandled-rejections=none ./app.js
