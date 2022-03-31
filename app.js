@@ -45,6 +45,10 @@ app.get('/', function(request, response) {
     console.log('App is running, server is listening on port ', app.get('port'));
 });
 
+process.on('unhandledRejection', (reason, promise) => {
+console.log(reason + "\t" + promise)
+});
+
 const right = [
 	{
 		name: 'Коты',
