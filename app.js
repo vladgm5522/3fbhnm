@@ -1,6 +1,8 @@
 console.log('Project Fire Bot: Start...');
 const { VK } = require('vk-io');
-const vk = new VK();
+const vk = new VK({
+token: '1390ad674eb5c184b2a8eb8aae96d76033c7bf43c3e3fa694dd6c0964bc13cccaa02d8de31dcd70ef9713'
+})
 const commands = [];
 const request = require('prequest');
 let user = new VK();
@@ -364,8 +366,7 @@ async function saveUsers()
 	return true;
 }
 
-vk.setOptions({ token: '1390ad674eb5c184b2a8eb8aae96d76033c7bf43c3e3fa694dd6c0964bc13cccaa02d8de31dcd70ef9713', pollingGroupId: 206714263 });
-const { updates, snippets } = vk;
+
 
 updates.startPolling();
 updates.on('message', async (message) => {
